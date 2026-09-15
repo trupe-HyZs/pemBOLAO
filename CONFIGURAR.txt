@@ -1,25 +1,32 @@
-PEMBOLÃO — VERSÃO PERSONALIZADA
+PEMBOLÃO — ATUALIZAÇÃO DO SITE
 
-1) Supabase
-- Mantenha as tabelas teams e matches já criadas.
-- config.js deve conter a URL do projeto e a chave pública (publishable/anon).
-- NUNCA coloque service_role/secret key no site.
+1) NÃO substitua o seu config.js atual.
+   Ele já contém a URL e a chave pública do seu Supabase.
 
-2) GitHub
-- Substitua o index.html e este CONFIGURAR.txt no repositório.
-- Mantenha o config.js que já está funcionando.
+2) Substitua o index.html do GitHub por este novo index.html.
 
-3) Vercel
-- Se o projeto já está conectado ao GitHub, basta fazer Commit no GitHub.
-- A Vercel deverá publicar a nova versão automaticamente.
+3) No Supabase, abra SQL Editor, cole todo o conteúdo de ATUALIZAR_SUPABASE.sql e clique em Run.
+   Isso adiciona:
+   - escudo personalizável para cada dupla;
+   - destaque persistente escolhido pelo organizador;
+   - chat público;
+   - moderação do chat no painel do organizador.
 
-4) Novidades desta versão
-- Logo minimalista de boneco de pebolim integrada no site.
-- Visual mais esportivo, escuro e moderno.
-- Destaque grande do líder.
-- O destaque pode ser automático (1º da tabela) ou escolhido pelo organizador.
-- Chaveamento da Copa com aparência de papel: quartas, semifinais e final.
-- O organizador pode escolher participantes e placares da Copa pelo painel Admin.
+4) Depois do SQL, espere a Vercel publicar o novo index.html.
 
-IMPORTANTE SOBRE COPA E DESTAQUE:
-A configuração visual do destaque e do chaveamento da Copa é salva no navegador usado pelo organizador (localStorage). Isso significa que, se você abrir o Admin em outro celular/computador, essas configurações não serão compartilhadas entre dispositivos. Os resultados do Brasileirão continuam no Supabase normalmente.
+5) Entre em / Organizador com o mesmo usuário do Supabase.
+   Agora você poderá:
+   - registrar resultados;
+   - escolher o destaque;
+   - editar nome/jogadores/escudo das duplas;
+   - montar o chaveamento;
+   - apagar mensagens do chat;
+   - apagar resultados.
+
+SEGURANÇA
+- O config.js usa apenas a chave pública/publishable/anon do Supabase.
+- NUNCA coloque a chave secreta/service_role no site.
+- O chat público permite mensagens sem login; há limite de 240 caracteres e uma trava simples de 3 segundos no navegador. Para um site maior, vale adicionar proteção antispam no backend.
+
+OBSERVAÇÃO SOBRE A COPA
+Nesta versão o chaveamento é salvo no navegador do organizador. Se quiser que a Copa seja editável de qualquer celular/computador e fique sincronizada para todos, a próxima melhoria é salvar o chaveamento em uma tabela do Supabase.
