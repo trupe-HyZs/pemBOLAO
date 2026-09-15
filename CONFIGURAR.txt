@@ -1,32 +1,41 @@
-PEMBOLÃO — ATUALIZAÇÃO DO SITE
+PEMBOLÃO — V4
 
-1) NÃO substitua o seu config.js atual.
-   Ele já contém a URL e a chave pública do seu Supabase.
+1) NÃO substitua seu config.js.
+   Ele já tem a URL e a chave pública/publishable do Supabase.
 
-2) Substitua o index.html do GitHub por este novo index.html.
+2) Substitua o index.html do GitHub pelo index.html desta versão.
 
-3) No Supabase, abra SQL Editor, cole todo o conteúdo de ATUALIZAR_SUPABASE.sql e clique em Run.
-   Isso adiciona:
-   - escudo personalizável para cada dupla;
-   - destaque persistente escolhido pelo organizador;
-   - chat público;
-   - moderação do chat no painel do organizador.
+3) No Supabase > SQL Editor, rode o arquivo:
+   ATUALIZAR_SUPABASE_V4.sql
+
+Essa atualização adiciona/garante:
+- escudos personalizáveis por dupla;
+- destaque manual ou automático pelo líder;
+- chat público com atualização em tempo real;
+- moderação do chat pelo organizador;
+- várias Copas salvas no Supabase;
+- chaveamento editável e compartilhado entre celulares/computadores.
 
 4) Depois do SQL, espere a Vercel publicar o novo index.html.
 
-5) Entre em / Organizador com o mesmo usuário do Supabase.
-   Agora você poderá:
-   - registrar resultados;
-   - escolher o destaque;
-   - editar nome/jogadores/escudo das duplas;
-   - montar o chaveamento;
-   - apagar mensagens do chat;
-   - apagar resultados.
+5) No Organizador, você terá abas:
+- Resultados: cadastrar/excluir jogos;
+- Destaque: escolher a dupla da home ou seguir o líder;
+- Duplas & escudos: nome, jogadores, ícone e cores;
+- Copas: criar várias copas, editar chaveamento, salvar no servidor e excluir;
+- Chat: moderar mensagens.
+
+COPAS
+- Crie uma copa com nome e status.
+- Selecione a copa no painel e monte quartas, semifinais e final.
+- Clique em “Salvar chaveamento”.
+- O público verá a mesma copa no menu “Copas”, em qualquer dispositivo.
+- O vencedor de cada confronto avança automaticamente quando o placar é decisivo.
 
 SEGURANÇA
-- O config.js usa apenas a chave pública/publishable/anon do Supabase.
-- NUNCA coloque a chave secreta/service_role no site.
-- O chat público permite mensagens sem login; há limite de 240 caracteres e uma trava simples de 3 segundos no navegador. Para um site maior, vale adicionar proteção antispam no backend.
+- O site usa somente a chave pública/publishable/anon do Supabase.
+- NUNCA coloque secret/service_role no config.js.
+- O login do organizador é pelo Supabase Authentication.
 
-OBSERVAÇÃO SOBRE A COPA
-Nesta versão o chaveamento é salvo no navegador do organizador. Se quiser que a Copa seja editável de qualquer celular/computador e fique sincronizada para todos, a próxima melhoria é salvar o chaveamento em uma tabela do Supabase.
+OBSERVAÇÃO
+O chat é público por design. Existe limite de tamanho e um pequeno intervalo antispam no navegador. Para uma comunidade maior, pode-se adicionar CAPTCHA/moderação mais forte depois.
