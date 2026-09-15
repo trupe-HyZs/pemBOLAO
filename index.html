@@ -1,184 +1,68 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>pemBOLÃO</title>
-  <meta name="description" content="Site oficial do pemBOLÃO">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
-  <style>
-    :root{--bg:#070b12;--panel:#101722;--panel2:#151e2b;--text:#f5f7fb;--muted:#93a0b2;--line:#283447;--gold:#ffd21c;--green:#39d98a;--red:#ff6262}
-    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% -10%,#28364f 0,transparent 35%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
-    header{position:sticky;top:0;z-index:20;background:rgba(7,11,18,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-    .nav{max-width:1180px;margin:auto;padding:14px 20px;display:flex;gap:18px;align-items:center;justify-content:space-between}.brand{font-size:25px;font-weight:950;letter-spacing:-1px}.brand b{color:var(--gold)}
-    nav{display:flex;gap:4px;overflow:auto;white-space:nowrap}nav button,.ghost{border:0;background:none;color:var(--muted);padding:10px 11px;font-weight:800;cursor:pointer;border-radius:9px}nav button:hover,nav button.active{color:var(--gold);background:rgba(255,210,28,.07)}
-    main{max-width:1180px;margin:auto;padding:30px 20px 70px}.page{display:none}.page.active{display:block}.hero{display:grid;grid-template-columns:1.45fr .75fr;gap:18px}.card{background:linear-gradient(145deg,#121b28,#0d141e);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 18px 50px rgba(0,0,0,.2)}
-    .hero .card{min-height:260px;display:flex;flex-direction:column;justify-content:center}.eyebrow{font-size:12px;font-weight:950;letter-spacing:2px;color:var(--gold);text-transform:uppercase}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:12px 0}.hero h1 span{color:var(--gold)}.hero p{color:var(--muted);line-height:1.65;max-width:680px}.season{text-align:center}.season strong{display:block;font-size:72px;color:var(--gold);line-height:1}.season small{color:var(--muted)}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:18px 0}.stat{font-size:34px;font-weight:950}.muted{color:var(--muted);font-size:13px}.title-row{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:15px}.title-row h2{margin:0}
-    table{width:100%;border-collapse:collapse}th,td{padding:13px 9px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}th{font-size:11px;color:var(--muted);text-transform:uppercase}tr:hover td{background:rgba(255,210,28,.035)}.rank{font-weight:950;color:var(--gold)}.team{font-weight:900}.pts{font-weight:950}.badge{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:50%;background:var(--panel2);border:1px solid var(--line);margin-right:8px}
-    .matches{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.match{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;background:var(--panel2);border:1px solid var(--line);padding:16px;border-radius:14px}.match .a{text-align:right;font-weight:900}.match .b{font-weight:900}.score{font-size:21px;font-weight:950}.date{grid-column:1/-1;color:var(--muted);font-size:11px}
-    .teamgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.teamcard h3{margin:8px 0 4px}.teamcard .logo{font-size:35px;font-weight:950;color:var(--gold)}
-    .bracket{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:center}.round h3{font-size:12px;color:var(--muted);text-transform:uppercase}.slot{background:var(--panel2);border:1px solid var(--line);padding:14px;border-radius:12px;margin:10px 0;font-weight:850}.slot small{display:block;color:var(--muted);font-weight:500;margin-top:5px}
-    .formgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field label{font-size:12px;color:var(--muted);font-weight:800}.field input,.field select{width:100%;background:#090f17;color:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;outline:none}.field input:focus,.field select:focus{border-color:var(--gold)}
-    .btn{border:0;background:var(--gold);color:#111;padding:12px 16px;border-radius:10px;font-weight:950;cursor:pointer}.btn:hover{filter:brightness(1.05)}.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}.btn.danger{background:#392128;color:#ff9a9a}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
-    .notice{padding:12px 14px;border:1px solid #4b4120;background:#1d1910;color:#dfd18b;border-radius:12px;margin-bottom:15px}.error{border-color:#633037;background:#231318;color:#ff9b9b}.success{border-color:#24563f;background:#102219;color:#8ee9b9}
-    .hidden{display:none!important}.login{max-width:480px;margin:50px auto}.userbar{display:flex;align-items:center;gap:8px}.userbar span{color:var(--muted);font-size:12px}
-    footer{border-top:1px solid var(--line);text-align:center;color:var(--muted);padding:25px;font-size:12px}
-    @media(max-width:800px){.hero,.grid,.teamgrid,.matches,.formgrid,.bracket{grid-template-columns:1fr}.nav{align-items:flex-start}.season{min-height:170px}th:nth-child(n+7),td:nth-child(n+7){display:none}}
-  </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>pemBOLÃO</title><meta name="description" content="Site oficial do pemBOLÃO">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
+<style>
+:root{--bg:#050a0f;--panel:#0c151b;--panel2:#111d24;--text:#f5f7f7;--muted:#8fa1aa;--line:#23343b;--green:#00f58a;--green2:#08c875;--gold:#ffd166;--red:#ff6b6b;--radius:18px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 80% -10%,#17352d 0,transparent 34%),radial-gradient(circle at -10% 50%,#10202a 0,transparent 30%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}button,input,select{font:inherit}
+header{position:sticky;top:0;z-index:30;background:rgba(5,10,15,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}.nav{max-width:1220px;margin:auto;padding:11px 18px;display:flex;gap:18px;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:9px;font-size:22px;font-weight:950;letter-spacing:-1px}.brand svg{width:38px;height:38px}.brand b{color:var(--green)}nav{display:flex;gap:4px;overflow:auto;white-space:nowrap}nav button,.ghost{border:0;background:none;color:var(--muted);padding:10px 11px;font-weight:850;cursor:pointer;border-radius:10px}nav button:hover,nav button.active{color:var(--green);background:rgba(0,245,138,.08)}
+main{max-width:1220px;margin:auto;padding:28px 18px 70px}.page{display:none}.page.active{display:block}.card{background:linear-gradient(145deg,rgba(17,29,36,.96),rgba(8,16,21,.96));border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 18px 55px rgba(0,0,0,.22)}
+.hero{display:grid;grid-template-columns:1.5fr .7fr;gap:18px}.hero-main{min-height:360px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center}.hero-main:after{content:"";position:absolute;width:310px;height:310px;right:-80px;bottom:-110px;border:1px solid rgba(0,245,138,.2);border-radius:50%;box-shadow:0 0 0 35px rgba(0,245,138,.035),0 0 0 70px rgba(0,245,138,.02)}.eyebrow{font-size:12px;font-weight:950;letter-spacing:2px;color:var(--green);text-transform:uppercase}.hero h1{font-size:clamp(44px,7vw,82px);line-height:.9;margin:14px 0;letter-spacing:-4px}.hero h1 span{color:var(--green)}.hero p{color:var(--muted);line-height:1.7;max-width:700px}.logo-big{position:absolute;right:55px;top:55px;width:190px;opacity:.95;filter:drop-shadow(0 0 25px rgba(0,245,138,.12))}.season{text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}.season strong{display:block;font-size:76px;color:var(--green);line-height:1}.season small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:18px 0}.stat{font-size:31px;font-weight:950}.muted{color:var(--muted);font-size:13px}.title-row{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:15px}.title-row h2{margin:0}.btn{border:0;background:var(--green);color:#04110a;padding:12px 16px;border-radius:10px;font-weight:950;cursor:pointer}.btn:hover{filter:brightness(1.05)}.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}.btn.danger{background:#321b20;color:#ff9c9c}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.leader-card{border-color:rgba(0,245,138,.35);background:radial-gradient(circle at 100% 0,rgba(0,245,138,.13),transparent 42%),linear-gradient(145deg,#0d211b,#09141a);position:relative;overflow:hidden}.leader-label{color:var(--green);font-size:12px;font-weight:950;letter-spacing:1.5px;text-transform:uppercase}.leader-content{display:flex;align-items:center;gap:18px;margin-top:12px}.leader-logo{width:86px;height:86px;border-radius:50%;border:2px solid var(--green);display:grid;place-items:center;background:#07120e;font-size:37px;font-weight:950}.leader-name{font-size:30px;font-weight:950}.leader-players{color:var(--muted);margin-top:3px}.leader-points{color:var(--gold);font-weight:950;margin-top:7px}.crown{position:absolute;right:22px;top:15px;font-size:32px}
+.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:13px 9px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}th{font-size:11px;color:var(--muted);text-transform:uppercase}tr:hover td{background:rgba(0,245,138,.035)}.rank{font-weight:950;color:var(--green)}.team{font-weight:900}.pts{font-weight:950;color:var(--gold)}.badge{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:50%;background:var(--panel2);border:1px solid var(--line);margin-right:8px}
+.matches{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.match{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;background:var(--panel2);border:1px solid var(--line);padding:16px;border-radius:14px}.match .a{text-align:right;font-weight:900}.match .b{font-weight:900}.score{font-size:21px;font-weight:950;color:var(--gold)}.date{grid-column:1/-1;color:var(--muted);font-size:11px}.teamgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.teamcard h3{margin:8px 0 4px}.teamcard .logo{font-size:35px;font-weight:950;color:var(--green)}
+/* Chaveamento estilo papel */
+.cup-head{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:22px}.cup-head h2{margin:0}.cup-select{background:#081116;color:#fff;border:1px solid var(--line);border-radius:10px;padding:10px}.paper{overflow:auto;padding:8px 2px 18px}.bracket{min-width:930px;display:grid;grid-template-columns:1.1fr .95fr .85fr;gap:42px;align-items:stretch;position:relative}.round{display:flex;flex-direction:column;justify-content:space-around;gap:16px}.round-title{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:950;margin-bottom:2px}.match-box{background:#0a1116;border:2px solid #30434a;border-radius:7px;min-width:245px;position:relative;box-shadow:0 6px 0 rgba(255,255,255,.015)}.match-box:before{content:"";position:absolute;left:-18px;top:50%;width:16px;border-top:1px solid #52656c}.team-line{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px dashed #31434a;font-weight:850}.team-line:last-child{border-bottom:0}.team-line.win{color:var(--green)}.team-line small{color:var(--gold);font-weight:950}.bye{color:#6f8087!important;font-style:italic}.champion-box{border-color:var(--gold);box-shadow:0 0 0 1px rgba(255,209,102,.12),0 12px 35px rgba(255,209,102,.08)}.champion{margin-top:14px;text-align:center;color:var(--gold);font-weight:950;letter-spacing:1px}.paper-note{margin-top:18px;color:var(--muted);font-size:12px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field label{font-size:12px;color:var(--muted);font-weight:800}.field input,.field select{width:100%;background:#081016;color:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;outline:none}.field input:focus,.field select:focus{border-color:var(--green)}.notice{padding:12px 14px;border:1px solid #4b4120;background:#1d1910;color:#dfd18b;border-radius:12px;margin-bottom:15px}.error{border-color:#633037;background:#231318;color:#ff9b9b}.success{border-color:#24563f;background:#102219;color:#8ee9b9}.hidden{display:none!important}.login{max-width:480px;margin:50px auto}.userbar{display:flex;align-items:center;gap:8px}.userbar span{color:var(--muted);font-size:12px}.admin-section{margin-top:16px}.settings-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.setting-card{background:#091116;border:1px solid var(--line);border-radius:14px;padding:16px}.setting-card h3{margin-top:0}.hint{font-size:12px;color:var(--muted);line-height:1.55}footer{border-top:1px solid var(--line);text-align:center;color:var(--muted);padding:25px;font-size:12px}
+@media(max-width:850px){.hero,.grid,.teamgrid,.matches,.formgrid,.settings-grid{grid-template-columns:1fr}.logo-big{position:static;width:120px;margin:15px 0}.hero-main{min-height:420px}.nav{align-items:flex-start}.leader-name{font-size:24px}}
+</style>
 </head>
 <body>
-<header>
-  <div class="nav">
-    <div class="brand">pem<b>BOLÃO</b></div>
-    <nav id="nav">
-      <button class="active" data-page="inicio">Início</button>
-      <button data-page="tabela">Ranking</button>
-      <button data-page="jogos">Jogos</button>
-      <button data-page="copas">Copas</button>
-      <button data-page="duplas">Duplas</button>
-      <button data-page="admin">Admin</button>
-    </nav>
-  </div>
-</header>
-
+<header><div class="nav">
+  <div class="brand"><svg viewBox="0 0 100 100" aria-label="Logo pemBOLÃO"><circle cx="50" cy="50" r="44" fill="none" stroke="var(--green)" stroke-width="5"/><circle cx="50" cy="28" r="10" fill="#fff"/><path d="M39 43h22l8 28H31z" fill="#fff"/><path d="M39 44l-10 18M61 44l10 18M41 71l-5 14M59 71l5 14" stroke="#fff" stroke-width="7" stroke-linecap="round"/><circle cx="50" cy="28" r="4" fill="#07120e"/></svg><span>pem<b>BOLÃO</b></span></div>
+  <nav><button class="active" data-page="inicio">Início</button><button data-page="tabela">Tabela</button><button data-page="jogos">Jogos</button><button data-page="copas">Copas</button><button data-page="duplas">Duplas</button><button data-page="admin">Admin</button></nav>
+</div></header>
 <main>
 <section id="inicio" class="page active">
-  <div class="hero">
-    <div class="card">
-      <div class="eyebrow">Site oficial • Temporada 2026</div>
-      <h1>O Brasileirão<br>do <span>pebolim.</span></h1>
-      <p>Resultados, classificação, jogos, duplas e copas do pemBOLÃO em um só lugar.</p>
-    </div>
-    <div class="card season"><div><strong id="teamCount">6</strong><small>duplas na temporada</small></div></div>
-  </div>
-  <div class="grid">
-    <div class="card"><div class="muted">Líder atual</div><div class="stat" id="leader">—</div><div class="muted">por pontos</div></div>
-    <div class="card"><div class="muted">Partidas registradas</div><div class="stat" id="played">0</div><div class="muted">no Brasileirão</div></div>
-    <div class="card"><div class="muted">Última atualização</div><div class="stat" id="updated">—</div><div class="muted">dados online</div></div>
-  </div>
+  <div class="hero"><div class="card hero-main"><div class="eyebrow">Site oficial • Temporada 2026</div><h1>O Brasileirão<br>do <span>pebolim.</span></h1><p>Resultados, classificação, jogos, duplas e copas do pemBOLÃO em um só lugar.</p><svg class="logo-big" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" stroke="var(--green)" stroke-width="5"/><circle cx="50" cy="28" r="10" fill="#fff"/><path d="M39 43h22l8 28H31z" fill="#fff"/><path d="M39 44l-10 18M61 44l10 18M41 71l-5 14M59 71l5 14" stroke="#fff" stroke-width="7" stroke-linecap="round"/></svg></div><div class="card season"><div><strong id="teamCount">6</strong><small>duplas na temporada</small></div></div></div>
+  <div class="card leader-card" style="margin-top:18px"><span class="crown">♛</span><div class="leader-label">Líder do campeonato</div><div class="leader-content"><div class="leader-logo" id="leaderLogo">1</div><div><div class="leader-name" id="leader">—</div><div class="leader-players" id="leaderPlayers">—</div><div class="leader-points" id="leaderPoints">0 pts</div></div></div></div>
+  <div class="grid"><div class="card"><div class="muted">Partidas registradas</div><div class="stat" id="played">0</div><div class="muted">no Brasileirão</div></div><div class="card"><div class="muted">Última atualização</div><div class="stat" id="updated">—</div><div class="muted">dados online</div></div><div class="card"><div class="muted">Destaque</div><div class="stat" id="highlightMode">Automático</div><div class="muted">definido pelo organizador</div></div></div>
   <div class="card"><div class="title-row"><h2>Classificação</h2><button class="btn secondary" onclick="showPage('tabela')">Ver tabela completa</button></div><div id="miniTable"></div></div>
 </section>
-
-<section id="tabela" class="page">
-  <div class="card"><div class="title-row"><div><h2>Classificação</h2><div class="muted">Vitória 3 pts • Empate 1 pt • Derrota 0 pt</div></div><button class="btn secondary" onclick="loadData()">Atualizar</button></div><div id="fullTable"></div></div>
-</section>
-
-<section id="jogos" class="page">
-  <div class="card"><div class="title-row"><h2>Jogos do pemBOLÃO</h2><button class="btn secondary" onclick="loadData()">Atualizar</button></div><div class="matches" id="matches"></div></div>
-</section>
-
-<section id="copas" class="page">
-  <div class="card"><h2>Copas do pemBOLÃO</h2><p class="muted">Área preparada para os mata-matas. O chaveamento abaixo é um modelo inicial.</p>
-    <div class="bracket">
-      <div class="round"><h3>Entrada</h3><div class="slot">Os Blesseds × Pirocudos PC<small>Jogo 1</small></div><div class="slot">Os Aurudos × Guerreiros<small>Jogo 2</small></div><div class="slot">Gangue do Esquilo × Bisnaguinha PC<small>Jogo 3</small></div></div>
-      <div class="round"><h3>Semifinais</h3><div class="slot">Vencedor J1<small>aguardando</small></div><div class="slot">Vencedor J2<small>aguardando</small></div><div class="slot">Vencedor J3<small>aguardando</small></div></div>
-      <div class="round"><h3>Final</h3><div class="slot">Finalista 1<small>aguardando</small></div><div class="slot">Finalista 2<small>aguardando</small></div><div class="slot">🏆 CAMPEÃO<small>aguardando</small></div></div>
-    </div>
-  </div>
-</section>
-
+<section id="tabela" class="page"><div class="card"><div class="title-row"><div><h2>Classificação</h2><div class="muted">Vitória 3 pts • Empate 1 pt • Derrota 0 pt</div></div><button class="btn secondary" onclick="loadData()">Atualizar</button></div><div class="table-wrap" id="fullTable"></div></div></section>
+<section id="jogos" class="page"><div class="card"><div class="title-row"><h2>Jogos do Brasileirão</h2><button class="btn secondary" onclick="loadData()">Atualizar</button></div><div class="matches" id="matches"></div></div></section>
+<section id="copas" class="page"><div class="card"><div class="cup-head"><div><h2>🏆 Copa do pemBOLÃO</h2><div class="muted">Chaveamento no estilo papel: quartas, semifinais e final.</div></div><select id="cupView" class="cup-select" onchange="renderCup()"><option>Copa pemBOLÃO</option><option>Supercopa</option><option>Torneio especial</option></select></div><div class="paper"><div class="bracket" id="bracket"></div></div><div class="paper-note">Os placares e participantes definidos pelo organizador aparecem aqui. Em caso de empate, o vencedor deve ser definido no regulamento do torneio.</div></div></section>
 <section id="duplas" class="page"><div class="card"><h2>Duplas</h2><div class="teamgrid" id="teams"></div></div></section>
-
 <section id="admin" class="page">
-  <div id="loginBox" class="card login">
-    <h2>Área do organizador</h2><p class="muted">Entre com o usuário criado no Supabase Authentication.</p>
-    <div id="loginMsg"></div>
-    <div class="field"><label>E-mail</label><input id="email" type="email" autocomplete="username"></div><br>
-    <div class="field"><label>Senha</label><input id="password" type="password" autocomplete="current-password"></div>
-    <div class="actions"><button class="btn" onclick="login()">Entrar</button></div>
-  </div>
-
+  <div id="loginBox" class="card login"><h2>Área do organizador</h2><p class="muted">Entre com o usuário criado no Supabase Authentication.</p><div id="loginMsg"></div><div class="field"><label>E-mail</label><input id="email" type="email" autocomplete="username"></div><br><div class="field"><label>Senha</label><input id="password" type="password" autocomplete="current-password"></div><div class="actions"><button class="btn" onclick="login()">Entrar</button></div></div>
   <div id="adminPanel" class="hidden">
-    <div class="card">
-      <div class="title-row"><div><h2>Painel do organizador</h2><div class="userbar"><span id="loggedUser"></span></div></div><button class="btn secondary" onclick="logout()">Sair</button></div>
-      <div id="adminMsg"></div>
-      <div class="formgrid">
-        <div class="field"><label>Dupla 1</label><select id="teamA"></select></div>
-        <div class="field"><label>Dupla 2</label><select id="teamB"></select></div>
-        <div class="field"><label>Gols da dupla 1</label><input id="scoreA" type="number" min="0" value="0"></div>
-        <div class="field"><label>Gols da dupla 2</label><input id="scoreB" type="number" min="0" value="0"></div>
-        <div class="field"><label>Data</label><input id="matchDate" type="date"></div>
-        <div class="field"><label>Campeonato</label><select id="tournament"><option>Brasileirão pemBOLÃO</option><option>Copa pemBOLÃO</option><option>Supercopa</option><option>Torneio especial</option></select></div>
-      </div>
-      <div class="actions"><button class="btn" onclick="addMatch()">Registrar resultado</button></div>
-    </div>
-    <div class="card" style="margin-top:16px"><h3>Resultados cadastrados</h3><div id="adminMatches"></div></div>
+    <div class="card"><div class="title-row"><div><h2>Painel do organizador</h2><div class="userbar"><span id="loggedUser"></span></div></div><button class="btn secondary" onclick="logout()">Sair</button></div><div id="adminMsg"></div><div class="formgrid"><div class="field"><label>Dupla 1</label><select id="teamA"></select></div><div class="field"><label>Dupla 2</label><select id="teamB"></select></div><div class="field"><label>Gols da dupla 1</label><input id="scoreA" type="number" min="0" value="0"></div><div class="field"><label>Gols da dupla 2</label><input id="scoreB" type="number" min="0" value="0"></div><div class="field"><label>Data</label><input id="matchDate" type="date"></div><div class="field"><label>Campeonato</label><select id="tournament"><option>Brasileirão pemBOLÃO</option><option>Copa pemBOLÃO</option><option>Supercopa</option><option>Torneio especial</option></select></div></div><div class="actions"><button class="btn" onclick="addMatch()">Registrar resultado</button></div></div>
+    <div class="card admin-section"><h3>👑 Destaque do líder</h3><p class="hint">Automático usa o 1º colocado da tabela. Se quiser destacar outra dupla, escolha aqui. A escolha fica salva neste navegador.</p><div class="field"><label>Quem aparece no destaque?</label><select id="highlightTeam" onchange="saveHighlight()"><option value="auto">Automático — líder da tabela</option></select></div></div>
+    <div class="card admin-section"><h3>🏆 Montar chaveamento da Copa</h3><p class="hint">Você pode trocar as duplas e os placares do mata-mata. A aparência do site fica no formato de chaveamento; os dados da Copa ficam salvos neste navegador.</p><div id="cupEditor"></div><div class="actions"><button class="btn" onclick="saveCup()">Salvar chaveamento</button><button class="btn secondary" onclick="resetCup()">Restaurar modelo</button></div></div>
+    <div class="card admin-section"><h3>Resultados cadastrados</h3><div id="adminMatches"></div></div>
   </div>
 </section>
-</main>
-<footer>pemBOLÃO • Site oficial da competição</footer>
-
+</main><footer>pemBOLÃO • Mais que um jogo, é amizade.</footer>
 <script>
-const CONFIG = window.PEMBOLAO_CONFIG || {};
-const sb = (CONFIG.url && CONFIG.anonKey) ? window.supabase.createClient(CONFIG.url, CONFIG.anonKey) : null;
-let teams=[], matches=[];
-
-const $=id=>document.getElementById(id);
-function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id))}
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
-
-function fmtDate(d){if(!d)return '—'; return new Date(d+'T00:00:00').toLocaleDateString('pt-BR')}
-function standings(){
-  return teams.map(t=>{let s={...t,j:0,v:0,e:0,d:0,gp:0,gc:0,pts:0};
-    matches.filter(m=>m.tournament==='Brasileirão pemBOLÃO').forEach(m=>{
-      const a=m.team_a===t.id,b=m.team_b===t.id;if(!a&&!b)return;
-      const gf=a?Number(m.score_a):Number(m.score_b),gc=b?Number(m.score_a):Number(m.score_b);
-      s.j++;s.gp+=gf;s.gc+=gc;
-      if(gf>gc){s.v++;s.pts+=3}else if(gf===gc){s.e++;s.pts++}else s.d++;
-    });
-    s.sg=s.gp-s.gc;return s;
-  }).sort((a,b)=>b.pts-a.pts||b.sg-a.sg||b.gp-a.gp||a.name.localeCompare(b.name));
-}
-function tableHTML(list){
-  if(!list.length)return '<div class="muted">Nenhuma dupla cadastrada.</div>';
-  return `<table><thead><tr><th>#</th><th>Dupla</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th><th>SG</th><th>Pts</th></tr></thead><tbody>`+
-  list.map((s,i)=>`<tr><td class="rank">${i+1}</td><td class="team"><span class="badge">${s.name[0]}</span>${s.name}<div class="muted">${s.players||''}</div></td><td>${s.j}</td><td>${s.v}</td><td>${s.e}</td><td>${s.d}</td><td>${s.gp}</td><td>${s.gc}</td><td>${s.sg>0?'+':''}${s.sg}</td><td class="pts">${s.pts}</td></tr>`).join('')+'</tbody></table>';
-}
-function render(){
-  const s=standings();$('teamCount').textContent=teams.length;$('leader').textContent=s[0]?.name||'—';
-  const br=matches.filter(m=>m.tournament==='Brasileirão pemBOLÃO');$('played').textContent=br.length;$('updated').textContent=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-  $('miniTable').innerHTML=tableHTML(s.slice(0,6));$('fullTable').innerHTML=tableHTML(s);
-  $('matches').innerHTML=br.length?br.slice().sort((a,b)=>(b.match_date||'').localeCompare(a.match_date||'')).map(m=>`<div class="match"><div class="a">${m.teamAName}</div><div class="score">${m.score_a} × ${m.score_b}</div><div class="b">${m.teamBName}</div><div class="date">${fmtDate(m.match_date)}</div></div>`).join(''):'<div class="muted">Nenhum jogo registrado ainda.</div>';
-  $('teams').innerHTML=teams.map(t=>`<div class="card teamcard"><div class="logo">${t.name[0]}</div><h3>${t.name}</h3><div class="muted">${t.players||''}</div></div>`).join('');
-  $('adminMatches').innerHTML=matches.length?matches.slice().sort((a,b)=>(b.match_date||'').localeCompare(a.match_date||'')).map(m=>`<p><b>${m.teamAName}</b> ${m.score_a} × ${m.score_b} <b>${m.teamBName}</b> <span class="muted">• ${m.tournament||''} • ${fmtDate(m.match_date)}</span> <button class="btn danger" style="padding:5px 8px;margin-left:6px" onclick="removeMatch('${m.id}')">excluir</button></p>`).join(''):'<span class="muted">Nenhum resultado.</span>';
-  const opts=teams.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');$('teamA').innerHTML=opts;$('teamB').innerHTML=opts;
-}
-async function loadData(){
-  if(!sb){$('miniTable').innerHTML='<div class="notice error">Falta configurar o Supabase. Veja o arquivo CONFIGURAR.txt.</div>';return}
-  const [tr,mr]=await Promise.all([sb.from('teams').select('*').order('name'),sb.from('matches').select('*').order('match_date',{ascending:false})]);
-  if(tr.error){console.error(tr.error);alert('Erro ao carregar duplas: '+tr.error.message);return}
-  if(mr.error){console.error(mr.error);alert('Erro ao carregar jogos: '+mr.error.message);return}
-  teams=tr.data||[]; const map=Object.fromEntries(teams.map(t=>[t.id,t.name]));
-  matches=(mr.data||[]).map(m=>({...m,teamAName:map[m.team_a]||'Dupla removida',teamBName:map[m.team_b]||'Dupla removida'})); render();
-}
-async function login(){
-  if(!sb){$('loginMsg').innerHTML='<div class="notice error">Configure o Supabase primeiro.</div>';return}
-  const {error}=await sb.auth.signInWithPassword({email:$('email').value,password:$('password').value});
-  $('loginMsg').innerHTML=error?`<div class="notice error">${error.message}</div>`:'';
-  if(!error) await updateAuthUI();
-}
-async function logout(){await sb.auth.signOut();await updateAuthUI()}
-async function updateAuthUI(){
-  if(!sb)return;
-  const {data:{session}}=await sb.auth.getSession();const ok=!!session;
-  $('loginBox').classList.toggle('hidden',ok);$('adminPanel').classList.toggle('hidden',!ok);
-  if(ok){$('loggedUser').textContent=session.user.email;await loadData()}
-}
-async function addMatch(){
-  const a=$('teamA').value,b=$('teamB').value,sa=Number($('scoreA').value),sbv=Number($('scoreB').value);
-  if(!a||!b||a===b){$('adminMsg').innerHTML='<div class="notice error">Escolha duas duplas diferentes.</div>';return}
-  if(sa<0||sbv<0||!Number.isInteger(sa)||!Number.isInteger(sbv)){return}
-  const {error}=await sb.from('matches').insert({team_a:a,team_b:b,score_a:sa,score_b:sbv,match_date:$('matchDate').value||new Date().toISOString().slice(0,10),tournament:$('tournament').value});
-  if(error){$('adminMsg').innerHTML=`<div class="notice error">${error.message}</div>`;return}
-  $('adminMsg').innerHTML='<div class="notice success">Resultado registrado!</div>';await loadData();
-}
-async function removeMatch(id){
-  if(!confirm('Excluir este resultado?'))return;
-  const {error}=await sb.from('matches').delete().eq('id',id);
-  if(error)alert('Não foi possível excluir: '+error.message);else await loadData();
-}
+const CONFIG=window.PEMBOLAO_CONFIG||{};const sb=(CONFIG.url&&CONFIG.anonKey)?window.supabase.createClient(CONFIG.url,CONFIG.anonKey):null;let teams=[],matches=[];
+const $=id=>document.getElementById(id);function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));if(id==='copas')renderCup()}document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+function fmtDate(d){if(!d)return'—';return new Date(d+'T00:00:00').toLocaleDateString('pt-BR')}
+function standings(){return teams.map(t=>{let s={...t,j:0,v:0,e:0,d:0,gp:0,gc:0,pts:0};matches.filter(m=>m.tournament==='Brasileirão pemBOLÃO').forEach(m=>{const a=m.team_a===t.id,b=m.team_b===t.id;if(!a&&!b)return;const gf=a?Number(m.score_a):Number(m.score_b),gc=b?Number(m.score_a):Number(m.score_b);s.j++;s.gp+=gf;s.gc+=gc;if(gf>gc){s.v++;s.pts+=3}else if(gf===gc){s.e++;s.pts++}else s.d++});s.sg=s.gp-s.gc;return s}).sort((a,b)=>b.pts-a.pts||b.sg-a.sg||b.gp-a.gp||a.name.localeCompare(b.name))}
+function tableHTML(list){if(!list.length)return'<div class="muted">Nenhuma dupla cadastrada.</div>';return'<table><thead><tr><th>#</th><th>Dupla</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th><th>SG</th><th>Pts</th></tr></thead><tbody>'+list.map((s,i)=>`<tr><td class="rank">${i+1}</td><td class="team"><span class="badge">${s.name[0]}</span>${s.name}<div class="muted">${s.players||''}</div></td><td>${s.j}</td><td>${s.v}</td><td>${s.e}</td><td>${s.d}</td><td>${s.gp}</td><td>${s.gc}</td><td>${s.sg>0?'+':''}${s.sg}</td><td class="pts">${s.pts}</td></tr>`).join('')+'</tbody></table>'}
+function getHighlight(){const saved=localStorage.getItem('pembolao_highlight');if(saved&&saved!=='auto'){const t=teams.find(x=>x.id===saved);if(t)return t}return standings()[0]||teams[0]||null}
+function render(){const s=standings(),leader=getHighlight();$('teamCount').textContent=teams.length;$('played').textContent=matches.filter(m=>m.tournament==='Brasileirão pemBOLÃO').length;$('updated').textContent=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});$('leader').textContent=leader?.name||'—';$('leaderPlayers').textContent=leader?.players||'—';const ls=s.find(x=>x.id===leader?.id)||leader;$('leaderPoints').textContent=`${ls?.pts||0} pts`;$('leaderLogo').textContent=leader?.name?.[0]||'1';$('highlightMode').textContent=localStorage.getItem('pembolao_highlight')&&localStorage.getItem('pembolao_highlight')!=='auto'?'Manual':'Automático';$('miniTable').innerHTML=tableHTML(s.slice(0,6));$('fullTable').innerHTML=tableHTML(s);const br=matches.filter(m=>m.tournament==='Brasileirão pemBOLÃO');$('matches').innerHTML=br.length?br.slice().sort((a,b)=>(b.match_date||'').localeCompare(a.match_date||'')).map(m=>`<div class="match"><div class="a">${m.teamAName}</div><div class="score">${m.score_a} × ${m.score_b}</div><div class="b">${m.teamBName}</div><div class="date">${fmtDate(m.match_date)}</div></div>`).join(''):'<div class="muted">Nenhum jogo registrado ainda.</div>';$('teams').innerHTML=teams.map(t=>`<div class="card teamcard"><div class="logo">${t.name[0]}</div><h3>${t.name}</h3><div class="muted">${t.players||''}</div></div>`).join('');$('adminMatches').innerHTML=matches.length?matches.slice().sort((a,b)=>(b.match_date||'').localeCompare(a.match_date||'')).map(m=>`<p><b>${m.teamAName}</b> ${m.score_a} × ${m.score_b} <b>${m.teamBName}</b> <span class="muted">• ${m.tournament||''} • ${fmtDate(m.match_date)}</span> <button class="btn danger" style="padding:5px 8px;margin-left:6px" onclick="removeMatch('${m.id}')">excluir</button></p>`).join(''):'<span class="muted">Nenhum resultado.</span>';const opts=teams.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');$('teamA').innerHTML=opts;$('teamB').innerHTML=opts;const hs=localStorage.getItem('pembolao_highlight')||'auto';$('highlightTeam').innerHTML='<option value="auto">Automático — líder da tabela</option>'+opts;$('highlightTeam').value=teams.some(t=>t.id===hs)?hs:'auto';renderCupEditor()}
+async function loadData(){if(!sb){$('miniTable').innerHTML='<div class="notice error">Falta configurar o Supabase. Veja o arquivo CONFIGURAR.txt.</div>';return}const[tr,mr]=await Promise.all([sb.from('teams').select('*').order('name'),sb.from('matches').select('*').order('match_date',{ascending:false})]);if(tr.error){console.error(tr.error);alert('Erro ao carregar duplas: '+tr.error.message);return}if(mr.error){console.error(mr.error);alert('Erro ao carregar jogos: '+mr.error.message);return}teams=tr.data||[];const map=Object.fromEntries(teams.map(t=>[t.id,t.name]));matches=(mr.data||[]).map(m=>({...m,teamAName:map[m.team_a]||'Dupla removida',teamBName:map[m.team_b]||'Dupla removida'}));render()}
+async function login(){if(!sb){$('loginMsg').innerHTML='<div class="notice error">Configure o Supabase primeiro.</div>';return}const{error}=await sb.auth.signInWithPassword({email:$('email').value,password:$('password').value});$('loginMsg').innerHTML=error?`<div class="notice error">${error.message}</div>`:'';if(!error)await updateAuthUI()}async function logout(){await sb.auth.signOut();await updateAuthUI()}async function updateAuthUI(){if(!sb)return;const{data:{session}}=await sb.auth.getSession();const ok=!!session;$('loginBox').classList.toggle('hidden',ok);$('adminPanel').classList.toggle('hidden',!ok);if(ok){$('loggedUser').textContent=session.user.email;await loadData()}}
+async function addMatch(){const a=$('teamA').value,b=$('teamB').value,sa=Number($('scoreA').value),sbv=Number($('scoreB').value);if(!a||!b||a===b){$('adminMsg').innerHTML='<div class="notice error">Escolha duas duplas diferentes.</div>';return}if(sa<0||sbv<0||!Number.isInteger(sa)||!Number.isInteger(sbv))return;const{error}=await sb.from('matches').insert({team_a:a,team_b:b,score_a:sa,score_b:sbv,match_date:$('matchDate').value||new Date().toISOString().slice(0,10),tournament:$('tournament').value});if(error){$('adminMsg').innerHTML=`<div class="notice error">${error.message}</div>`;return}$('adminMsg').innerHTML='<div class="notice success">Resultado registrado!</div>';await loadData()}async function removeMatch(id){if(!confirm('Excluir este resultado?'))return;const{error}=await sb.from('matches').delete().eq('id',id);if(error)alert('Não foi possível excluir: '+error.message);else await loadData()}
+function saveHighlight(){localStorage.setItem('pembolao_highlight',$('highlightTeam').value);render()}
+const cupKey='pembolao_cup_v1';function defaultCup(){return{q1:{a:'',b:'',sa:'',sb:''},q2:{a:'',b:'',sa:'',sb:''},q3:{a:'',b:'BYE',sa:'',sb:''},q4:{a:'',b:'BYE',sa:'',sb:''},s1:{a:'Vencedor Q1',b:'Vencedor Q2',sa:'',sb:''},s2:{a:'Vencedor Q3',b:'Vencedor Q4',sa:'',sb:''},f:{a:'Vencedor S1',b:'Vencedor S2',sa:'',sb:''}}}function getCup(){try{return JSON.parse(localStorage.getItem(cupKey))||defaultCup()}catch{return defaultCup()}}
+function renderCup(){const c=getCup();const teamName=id=>teams.find(t=>t.id===id)?.name||id;const win=(m)=>{if(m.a&&m.b&&m.a!=='Vencedor Q1'&&m.a!=='Vencedor Q2'&&m.a!=='Vencedor Q3'&&m.a!=='Vencedor Q4'&&m.a!=='Vencedor S1'&&m.a!=='Vencedor S2'&&m.b!=='BYE'&&m.sa!==''&&m.sb!==''){if(Number(m.sa)>Number(m.sb))return m.a;if(Number(m.sb)>Number(m.sa))return m.b}return''};const q1=win(c.q1)||'Vencedor Q1',q2=win(c.q2)||'Vencedor Q2',q3= c.q3.b==='BYE'?(c.q3.a?teamName(c.q3.a):'Classificado'):win(c.q3)||'Vencedor Q3',q4=c.q4.b==='BYE'?(c.q4.a?teamName(c.q4.a):'Classificado'):win(c.q4)||'Vencedor Q4';const s1=win({...c.s1,a:q1,b:q2})||'Vencedor S1',s2=win({...c.s2,a:q3,b:q4})||'Vencedor S2';const champ=win({...c.f,a:s1,b:s2})||'A definir';$('bracket').innerHTML=`<div class="round"><div class="round-title">Quartas de final</div>${box(c.q1,'Q1',teamName)}${box(c.q2,'Q2',teamName)}${box(c.q3,'Q3',teamName,true)}${box(c.q4,'Q4',teamName,true)}</div><div class="round"><div class="round-title">Semifinais</div>${box({...c.s1,a:q1,b:q2},'S1',teamName)}${box({...c.s2,a:q3,b:q4},'S2',teamName)}</div><div class="round"><div class="round-title">Final</div>${box({...c.f,a:s1,b:s2},'FINAL',teamName,true)}<div class="champion">🏆 CAMPEÃO: ${champ}</div></div>`}
+function box(m,label,teamName,bye=false){const a=m.a?teamName(m.a):'A definir',b=m.b==='BYE'?'BYE':(m.b?teamName(m.b):'A definir');return`<div class="match-box"><div class="team-line ${b==='BYE'?'bye':''}"><span>${a}</span><small>${m.sa!==''&&m.sa!=null?m.sa:''}</small></div><div class="team-line ${b==='BYE'?'bye':''}"><span>${b}</span><small>${m.sb!==''&&m.sb!=null?m.sb:''}</small></div></div>`}
+function renderCupEditor(){if(!$('cupEditor'))return;const c=getCup();const opts='<option value="">Escolha a dupla</option>'+teams.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');function row(k,label,bye=false){const m=c[k];return`<div class="setting-card"><h3>${label}</h3><div class="formgrid"><div class="field"><label>Dupla A</label><select id="${k}a">${opts}</select></div><div class="field"><label>Placar A</label><input id="${k}sa" type="number" min="0" value="${m.sa||''}"></div><div class="field"><label>Dupla B</label>${bye?'<input value="BYE" disabled>':`<select id="${k}b">${opts}</select>`}</div><div class="field"><label>Placar B</label><input id="${k}sb" type="number" min="0" value="${m.sb||''}"></div></div></div>`}$('cupEditor').innerHTML='<div class="settings-grid">'+row('q1','Quartas 1')+row('q2','Quartas 2')+row('q3','Quartas 3 — vaga direta')+row('q4','Quartas 4 — vaga direta')+row('s1','Semifinal 1')+row('s2','Semifinal 2')+row('f','Final')+'</div>';['q1','q2','q3','q4'].forEach(k=>{if($(k+'a'))$(k+'a').value=c[k].a||'';if($(k+'b'))$(k+'b').value=c[k].b||''});['s1','s2','f'].forEach(k=>{if($(k+'a'))$(k+'a').value=c[k].a||'';if($(k+'b'))$(k+'b').value=c[k].b||''})}
+function saveCup(){const c=getCup();['q1','q2','q3','q4','s1','s2','f'].forEach(k=>{c[k].a=$(k+'a')?.value||c[k].a;c[k].b=$(k+'b')?.value||c[k].b;c[k].sa=$(k+'sa')?.value??c[k].sa;c[k].sb=$(k+'sb')?.value??c[k].sb});c.q3.b='BYE';c.q4.b='BYE';localStorage.setItem(cupKey,JSON.stringify(c));renderCup();$('adminMsg').innerHTML='<div class="notice success">Chaveamento da Copa salvo!</div>'}
+function resetCup(){localStorage.removeItem(cupKey);renderCupEditor();renderCup()}
 (async()=>{if($('matchDate'))$('matchDate').value=new Date().toISOString().slice(0,10);await loadData();if(sb){sb.auth.onAuthStateChange(()=>updateAuthUI());await updateAuthUI()}})();
-</script>
-</body>
-</html>
+</script></body></html>
