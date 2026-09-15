@@ -1,0 +1,92 @@
+# pemBOLÃO
+
+Versão conectada ao Supabase.
+
+## 1. Configurar o Supabase
+
+No painel do seu projeto:
+- Settings / Project Settings → API
+- copie a **Project URL**
+- copie a chave pública **anon / publishable** (o nome pode variar conforme a interface)
+
+Abra `config.js` e substitua:
+
+`COLE_A_URL_DO_SEU_PROJETO_AQUI`
+`COLE_A_CHAVE_ANON_PUBLIC_AQUI`
+
+NÃO coloque a `service_role` key.
+
+## 2. Estrutura já esperada
+
+Tabelas:
+- `teams`
+- `matches`
+
+A tabela `teams` deve ter:
+- `id` uuid
+- `name` text
+- `players` text
+- `created_at` timestamp/date
+
+A tabela `matches` deve ter:
+- `id` uuid
+- `team_a` uuid
+- `team_b` uuid
+- `score_a` bigint
+- `score_b` bigint
+- `match_date` date
+- `tournament` text
+- `created_at` timestamp
+
+Os UUIDs de `team_a` e `team_b` devem referenciar `teams.id`.
+
+## 3. Segurança (RLS)
+
+O site público precisa de SELECT em `teams` e `matches`.
+Somente usuários autenticados devem poder inserir/alterar/excluir `matches`.
+
+Exemplo de políticas para começar:
+
+```sql
+alter table public.teams enable row level security;
+alter table public.matches enable row level security;
+
+create policy "public read teams"
+on public.teams for select
+to anon, authenticated
+using (true);
+
+create policy "public read matches"
+on public.matches for select
+to anon, authenticated
+using (true);
+
+create policy "authenticated manage matches"
+on public.matches for all
+to authenticated
+using (true)
+with check (true);
+```
+
+Se você já criou políticas equivalentes, não precisa recriá-las.
+
+## 4. Login
+
+Crie seu usuário em:
+Authentication → Users → Add user.
+
+Esse usuário poderá entrar na aba Admin do site.
+
+## 5. Rodar localmente
+
+Como o navegador pode bloquear alguns recursos quando o arquivo é aberto diretamente, é melhor publicar pelo Vercel/GitHub ou usar um servidor local simples.
+
+## 6. Publicar
+
+Suba `index.html` e `config.js` para um repositório GitHub e importe o repositório no Vercel.
+
+A URL pública será fornecida pelo Vercel.
+
+## Observação
+
+A chave `anon/public` é feita para ser usada no frontend. A segurança real vem das políticas RLS do Supabase. Nunca coloque a `service_role` key no frontend.
